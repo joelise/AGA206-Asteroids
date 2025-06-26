@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5512007317395828143}
   - component: {fileID: 3686108302788536670}
   - component: {fileID: 1097162840566670743}
+  - component: {fileID: -2240664773775863928}
   m_Layer: 0
   m_Name: Asteroid_Med01
   m_TagString: Untagged
@@ -179,3 +180,15 @@ PolygonCollider2D:
       - {x: 0.09427356, y: 0.07220019}
       - {x: 0.06984847, y: 0.09511966}
   m_UseDelaunayMesh: 0
+--- !u!114 &-2240664773775863928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611047589723302051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61abd22d25aab2147ba25c25fef26a27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

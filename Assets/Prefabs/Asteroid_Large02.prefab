@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4507388012600850826}
   - component: {fileID: 7240046279443818604}
   - component: {fileID: 492958106695130800}
+  - component: {fileID: 2602799491172267335}
   m_Layer: 0
   m_Name: Asteroid_Large02
   m_TagString: Untagged
@@ -249,3 +250,15 @@ PolygonCollider2D:
       - {x: 0.20023751, y: 0.14472}
       - {x: 0.2281171, y: 0.16633753}
   m_UseDelaunayMesh: 0
+--- !u!114 &2602799491172267335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5194838875620538017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61abd22d25aab2147ba25c25fef26a27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
