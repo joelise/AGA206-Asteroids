@@ -215,7 +215,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 1770924881}
   - component: {fileID: 1770924883}
   - component: {fileID: 1770924885}
+  - component: {fileID: 1770924886}
   m_Layer: 0
   m_Name: Spaceship
   m_TagString: Untagged
@@ -526,6 +527,18 @@ PolygonCollider2D:
       - {x: 0.27423725, y: -0.193335}
       - {x: 0.011475502, y: 0.31706116}
   m_UseDelaunayMesh: 0
+--- !u!114 &1770924886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770924880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2380cfe428c756646a4b04bff4899fe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1881451602 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5505509818938198343, guid: 439e3521eceafcf4b90158f76f95c9d8, type: 3}
@@ -721,6 +734,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Asteroid_Small03
       objectReference: {fileID: 0}
+    - target: {fileID: 6538966118732436153, guid: c61ce6c7ed11fa94094d38dc3682a189, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8457482265929437728, guid: c61ce6c7ed11fa94094d38dc3682a189, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -835,6 +852,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Asteroid_Small02
       objectReference: {fileID: 0}
+    - target: {fileID: 184248315183814101, guid: c5c09d326d2ff7a4b969a560826b0610, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6115388743949218540, guid: c5c09d326d2ff7a4b969a560826b0610, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -948,6 +969,10 @@ PrefabInstance:
     - target: {fileID: 3151577066346558193, guid: 690e19facf253164d90860b186eaa83d, type: 3}
       propertyPath: m_Name
       value: Asteroid_Small01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151577066346558193, guid: 690e19facf253164d90860b186eaa83d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5892957677617159688, guid: 690e19facf253164d90860b186eaa83d, type: 3}
       propertyPath: m_LocalPosition.x
