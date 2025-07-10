@@ -194,12 +194,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61abd22d25aab2147ba25c25fef26a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnValue: 2
   CollisionDamage: 1
   HealthMax: 3
   Chunks:
   - {fileID: 3151577066346558193, guid: 690e19facf253164d90860b186eaa83d, type: 3}
   - {fileID: 184248315183814101, guid: c5c09d326d2ff7a4b969a560826b0610, type: 3}
   - {fileID: 6538966118732436153, guid: c61ce6c7ed11fa94094d38dc3682a189, type: 3}
+  ChunksMin: 0
+  ChunksMax: 4
+  ExplodeDist: 0.5
+  ExplosionForce: 10
 --- !u!114 &6952270069055425222
 MonoBehaviour:
   m_ObjectHideFlags: 0

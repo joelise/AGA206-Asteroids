@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Asteroids : MonoBehaviour
 {
+    [Range(1, 3)]
+    public int SpawnValue = 3;
     public int CollisionDamage = 1;
     public int HealthMax = 3;
     private int HealthCurrent;

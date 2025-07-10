@@ -15,6 +15,8 @@ public class Spaceship : MonoBehaviour
     public float FiringRate = 0.33f;
     private float fireTimer = 0f;
 
+    [Header("Sound")]
+    public SoundPlayer HitSounds;
 
     private Rigidbody2D rb2D;
 
@@ -67,8 +69,10 @@ public class Spaceship : MonoBehaviour
     {
         //Reduce the current health by the damage
         HealthCurrent = HealthCurrent - damage;
-        
+
         //HealthCurrent -= damage; another way for above
+
+        HitSounds.PlayRandomSound();
 
         if (HealthCurrent <= 0)
         {

@@ -186,8 +186,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61abd22d25aab2147ba25c25fef26a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnValue: 1
   CollisionDamage: 1
   HealthMax: 3
+  Chunks: []
+  ChunksMin: 0
+  ChunksMax: 4
+  ExplodeDist: 0.5
+  ExplosionForce: 10
 --- !u!114 &2357972763015157944
 MonoBehaviour:
   m_ObjectHideFlags: 0
