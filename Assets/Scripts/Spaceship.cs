@@ -18,6 +18,9 @@ public class Spaceship : MonoBehaviour
     [Header("Sound")]
     public SoundPlayer HitSounds;
 
+    [Header("UI")]
+    public ScreenFlash Flash;
+
     private Rigidbody2D rb2D;
 
     void Start()
@@ -73,6 +76,7 @@ public class Spaceship : MonoBehaviour
         //HealthCurrent -= damage; another way for above
 
         HitSounds.PlayRandomSound();
+        StartCoroutine(Flash.FlashRoutine());
 
         if (HealthCurrent <= 0)
         {
