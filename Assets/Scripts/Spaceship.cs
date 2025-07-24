@@ -1,3 +1,6 @@
+using JetBrains.Annotations;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Spaceship : MonoBehaviour
@@ -21,10 +24,17 @@ public class Spaceship : MonoBehaviour
     [Header("UI")]
     public ScreenFlash Flash;
     public GameOverUi GameOverUI;
+    public ScoreUI ScoreUI;
+    public PauseMenuUI PauseUI;
 
     [Header("Score")]
     public int Score;
     public int HighScore;
+
+    [Header("Camera")]
+    public CameraShake CameraShake;
+
+    public bool IsPaused = false;
 
     private Rigidbody2D rb2D;
 
@@ -46,11 +56,18 @@ public class Spaceship : MonoBehaviour
         ApplyThrust(vertical);
         ApplyTorque(horizontal);
         UpdateFiring();
+        PauseMenu();
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             PlayerPrefs.DeleteKey("HighScore");
         }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Explode();
+        }
+        //Debug.Log(delay);
     }
 
     private void UpdateFiring()
@@ -82,13 +99,19 @@ public class Spaceship : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+       
+
         //Reduce the current health by the damage
         HealthCurrent = HealthCurrent - damage;
 
         //HealthCurrent -= damage; another way for above
 
         HitSounds.PlayRandomSound();
+        StartCoroutine(CameraShake.ShakeRoutine());
         StartCoroutine(Flash.FlashRoutine());
+        
+        
+        
 
         if (HealthCurrent <= 0)
         {
@@ -136,6 +159,36 @@ public class Spaceship : MonoBehaviour
             SetHighScore(Score);
             celebrateHighScore = true;
         }
+        ScoreUI.Hide();
         GameOverUI.Show(celebrateHighScore, Score, GetHighScore());
     }
+
+    public void AutoKill()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Explode();
+        }
+    }
+
+    public void PauseMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            IsPaused = true;
+            PauseUI.Show();
+            Time.timeScale = 0f;
+        }
+        if ((PauseUI.isPaused == false) && (IsPaused = true))
+        {
+            IsPaused = false;
+            Time.timeScale = 1f;
+        }
+        
+    }
+
+    
+    
+
+    
 }

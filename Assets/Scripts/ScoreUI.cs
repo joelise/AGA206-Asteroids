@@ -6,6 +6,7 @@ public class ScoreUI : MonoBehaviour
 {
     public TMP_Text ScoreBoxText;
     private Spaceship ship;
+    public GameObject ScoreText;
 
     private void Start()
     {
@@ -16,10 +17,14 @@ public class ScoreUI : MonoBehaviour
     {
         if (ship != null)
         {
-            ScoreBoxText.text = "Score: " + ship.Score.ToString();
+            ScoreBoxText.text = "SCORE: " + ship.Score.ToString();
         }
 
     }
-    
+
+    public void Hide()
+    {
+        ScoreText.SetActive(false);
+    }
 
 }
