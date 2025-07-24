@@ -46,6 +46,11 @@ public class Spaceship : MonoBehaviour
         ApplyThrust(vertical);
         ApplyTorque(horizontal);
         UpdateFiring();
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PlayerPrefs.DeleteKey("HighScore");
+        }
     }
 
     private void UpdateFiring()
