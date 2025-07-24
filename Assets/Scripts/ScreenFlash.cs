@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ScreenFlash : MonoBehaviour
 {
     public float FlashDuration = 0.33f;
+    public GameObject FlashScreen;
     private Image flashImage;
     private Color imageColor;
   
@@ -42,4 +43,9 @@ public class ScreenFlash : MonoBehaviour
             StartCoroutine(FlashRoutine());
     }
 
+    public void Hide()
+    {
+        FlashScreen.SetActive(false);
+    }
+ 
 }
