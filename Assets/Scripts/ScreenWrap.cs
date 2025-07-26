@@ -8,7 +8,6 @@ public class ScreenWrap : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-
     }
 
 
@@ -23,9 +22,6 @@ public class ScreenWrap : MonoBehaviour
         {
             return;
         }
-
-
-
 
         //Get the world position of the objject and convert to screen space
         Vector2 screenPos = Camera.main.WorldToScreenPoint(transform.position);
@@ -42,6 +38,7 @@ public class ScreenWrap : MonoBehaviour
             newScreenPos.x = 0;
         }
 
+
         if(screenPos.y < 0)     //If we move off the bottom
         {
             newScreenPos.y = Screen.height;
@@ -50,6 +47,7 @@ public class ScreenWrap : MonoBehaviour
         {
             newScreenPos.y = 0;
         }
+
 
         if(newScreenPos != screenPos)
         {

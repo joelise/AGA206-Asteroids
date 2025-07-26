@@ -14,7 +14,6 @@ public class ScreenFlash : MonoBehaviour
     {
         flashImage = GetComponent<Image>();
         imageColor = flashImage.color;
-        
     }
 
     public IEnumerator FlashRoutine()
@@ -35,12 +34,6 @@ public class ScreenFlash : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            StartCoroutine(FlashRoutine());
     }
 
     public void Hide()

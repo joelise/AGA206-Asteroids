@@ -11,10 +11,6 @@ public class SpawnManager : MonoBehaviour
 
     private float checkTimer = 0f;
 
-    void Start()
-    {
-        Debug.Log(TotalAsteroidValue());
-    }
 
     private void Update()
     {
@@ -52,14 +48,15 @@ public class SpawnManager : MonoBehaviour
 
     private Vector3 RandomOffScreenPoint()
     {
-        Vector2 randomPos = Random.insideUnitCircle;
-        Vector2 direction = randomPos.normalized;
+        Vector2 randomPos = Random.insideUnitCircle;        // Finds off screen point
+        Vector2 direction = randomPos.normalized;           // Normalized to get direction
         Vector2 finalPos = (Vector2)transform.position + direction * 2f;
 
-        return Camera.main.ViewportToWorldPoint(finalPos);
+        return Camera.main.ViewportToWorldPoint(finalPos);  // Converts to World Space
     }
     public int TotalAsteroidValue()
     {
+        //Calculates the total value of asteroids in the scene
         Asteroids[] asteroids = FindObjectsByType<Asteroids>(FindObjectsSortMode.None);
         int value = 0;
         for(int i = 0; i < asteroids.Length; i++)

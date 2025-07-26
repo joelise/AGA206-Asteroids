@@ -46,8 +46,6 @@ public class Spaceship : MonoBehaviour
         HighScore = GetHighScore();
     }
 
-
-
     void Update()
     {
         float horizontal = Input.GetAxis("Horizontal");
@@ -58,16 +56,13 @@ public class Spaceship : MonoBehaviour
         UpdateFiring();
         PauseMenu();
 
+        //Delete High Score
         if (Input.GetKeyDown(KeyCode.P))
         {
             PlayerPrefs.DeleteKey("HighScore");
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Explode();
-        }
-        //Debug.Log(delay);
+   
     }
 
     private void UpdateFiring()
@@ -101,7 +96,6 @@ public class Spaceship : MonoBehaviour
     public void TakeDamage(int damage)
     {
        
-
         //Reduce the current health by the damage
         HealthCurrent = HealthCurrent - damage;
 
@@ -112,8 +106,6 @@ public class Spaceship : MonoBehaviour
         StartCoroutine(Flash.FlashRoutine());
         
         
-        
-
         if (HealthCurrent <= 0)
         {
             Explode();
@@ -167,13 +159,6 @@ public class Spaceship : MonoBehaviour
 
     }
 
-    public void AutoKill()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Explode();
-        }
-    }
 
     public void PauseMenu()
     {
@@ -181,18 +166,13 @@ public class Spaceship : MonoBehaviour
         {
             IsPaused = true;
             PauseUI.Show();
-            Time.timeScale = 0f;
+            Time.timeScale = 0f; // Pauses in game time
         }
         if ((PauseUI.isPaused == false) && (IsPaused = true))
         {
             IsPaused = false;
-            Time.timeScale = 1f;
+            Time.timeScale = 1f; // Resumes in game time
         }
         
     }
-
-    
-    
-
-    
 }

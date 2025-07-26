@@ -20,12 +20,6 @@ public class Asteroids : MonoBehaviour
     private void Start()
     {
         HealthCurrent = HealthMax;
-       /* 
-        for(int i = 0; i < Chunks.Length; i++)
-        {
-            Debug.Log(i);
-        }
-       */
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

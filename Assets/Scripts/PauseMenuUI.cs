@@ -42,10 +42,4 @@ public class PauseMenuUI : MonoBehaviour
         ClickSounds.PlaySounds();
         Application.Quit();
     }
-
-
-
-
-
-
 }
