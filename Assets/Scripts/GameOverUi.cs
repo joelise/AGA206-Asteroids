@@ -8,6 +8,8 @@ public class GameOverUi : MonoBehaviour
     public TMP_Text ScoreTextBox, HighScoreTextBox;
     public GameObject GameOverPanel;
     public GameObject Celebrate;
+    public SoundPlayer ClickSounds;
+
 
     void Start()
     {
@@ -30,11 +32,13 @@ public class GameOverUi : MonoBehaviour
 
     public void ClickPlayAgain()
     {
+        ClickSounds.PlaySounds();
         SceneManager.LoadScene("Asteroids");
     }
 
     public void ClickMainMenu() 
     {
+        ClickSounds.PlaySounds();
         SceneManager.LoadScene("Title");
     } 
 }

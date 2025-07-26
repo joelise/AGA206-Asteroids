@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SoundPlayer : MonoBehaviour
@@ -38,4 +39,14 @@ public class SoundPlayer : MonoBehaviour
         audioSource.pitch = Random.Range(-0.9f, 1.1f);
         audioSource.Play();
     }
+
+    public void PlaySounds()
+    {
+        if (audioClip == null || audioClip.Length == 0)
+            return;
+
+        audioSource.clip = audioClip[Random.Range(0, audioClip.Length)];
+        audioSource.Play();
+    }
+
 }

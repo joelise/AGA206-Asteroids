@@ -3,17 +3,23 @@ using UnityEngine.SceneManagement;
 
 public class TitleScreenUI : MonoBehaviour
 {
-    
+    public SoundPlayer ClickSounds;
+    public SoundPlayer BkgMusic;
+
+    private void Start()
+    {
+        BkgMusic.PlaySounds();
+    }
     public void ClickPlay()
     {
-        Debug.Log("Play");
+        ClickSounds.PlaySounds();
         SceneManager.LoadScene("Asteroids"); //The name of your gameplay sceme
     }
     
 
     public void ClickQuit()
     {
-        Debug.Log("Quit");
+        ClickSounds.PlaySounds();
         Application.Quit();
     }
 }

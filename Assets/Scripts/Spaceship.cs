@@ -75,7 +75,8 @@ public class Spaceship : MonoBehaviour
         bool isFiring = Input.GetButton("Fire1");
         fireTimer -= Time.deltaTime;    //Decrement the timer
 
-        if (isFiring && fireTimer <= 0)
+        
+        if (isFiring && fireTimer <= 0 && IsPaused == false)
         {
             FireBullet();
             fireTimer = FiringRate;
@@ -125,10 +126,9 @@ public class Spaceship : MonoBehaviour
     {
         //Destroy the ship, end the game
         //Debug.Log("Game Over");
-
+        Time.timeScale = 0.5f;
         GameOver();
         Flash.Hide();
-        //Time.timeScale = 0.5f;
         Destroy(gameObject);
     }
 
@@ -165,8 +165,6 @@ public class Spaceship : MonoBehaviour
         ScoreUI.Hide();
         GameOverUI.Show(celebrateHighScore, Score, GetHighScore());
 
-        float t = 3f;
-        Time.timeScale = Mathf.Lerp(1f, 0.5f, t);
     }
 
     public void AutoKill()
