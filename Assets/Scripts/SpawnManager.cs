@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    public WaveObject[] Waves;
     public GameObject[] AsteroidRefs;   // Asteroids to spawn
     public float CheckInterval = 3f;    // The interval of time to check if we can spawn
     public float PushForce = 100f;      // The force to push the asteroids
@@ -74,4 +75,10 @@ public class SpawnManager : MonoBehaviour
 
         return direction;
     }
+}
+[System.Serializable]
+public class WaveObject
+{
+    public int SpawnAmount;
+    public GameObject[] AsteroidRefs;
 }
