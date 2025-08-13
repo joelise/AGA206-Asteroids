@@ -1857,12 +1857,33 @@ MonoBehaviour:
   - EnemyPrefab: {fileID: 7277008502067443425, guid: 41ebcbd242a994a4ebdab54a77baade7, type: 3}
     Strength: 3
     UnlockWave: 0
+  - EnemyPrefab: {fileID: 5194838875620538017, guid: d4d96bdb2e8970b4ab28c0ad01b33556, type: 3}
+    Strength: 3
+    UnlockWave: 0
+  - EnemyPrefab: {fileID: 1904912059566916943, guid: 99c2cad192f039a4a890ef57dc784ac8, type: 3}
+    Strength: 3
+    UnlockWave: 0
   - EnemyPrefab: {fileID: 5611047589723302051, guid: 5dbb5652020243c49b0f9dee8cf6cb32, type: 3}
+    Strength: 2
+    UnlockWave: 0
+  - EnemyPrefab: {fileID: 334793236411867442, guid: ec8c34a47c115074ca8cabeb2075d99a, type: 3}
+    Strength: 2
+    UnlockWave: 0
+  - EnemyPrefab: {fileID: 7898452474149521307, guid: 439e3521eceafcf4b90158f76f95c9d8, type: 3}
     Strength: 2
     UnlockWave: 0
   - EnemyPrefab: {fileID: 3151577066346558193, guid: 690e19facf253164d90860b186eaa83d, type: 3}
     Strength: 1
     UnlockWave: 0
+  - EnemyPrefab: {fileID: 184248315183814101, guid: c5c09d326d2ff7a4b969a560826b0610, type: 3}
+    Strength: 1
+    UnlockWave: 0
+  - EnemyPrefab: {fileID: 6538966118732436153, guid: c61ce6c7ed11fa94094d38dc3682a189, type: 3}
+    Strength: 1
+    UnlockWave: 0
+  spawnedEnemies: []
+  PushForce: 100
+  Inaccuracy: 2
 --- !u!4 &1265410527
 Transform:
   m_ObjectHideFlags: 0

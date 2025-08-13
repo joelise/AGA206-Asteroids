@@ -57,12 +57,12 @@ public class Asteroids : MonoBehaviour
         {
             CreateAsteroidChunk();
         }
-
+        //WaveManager.Instance.RemoveEnemy(gameObject);
         Destroy(gameObject);
     
     }
 
-    private void CreateAsteroidChunk()
+    public void CreateAsteroidChunk()
     {
         if (Chunks == null || Chunks.Length == 0)
             return;
@@ -76,6 +76,8 @@ public class Asteroids : MonoBehaviour
         spawnPos.y += Random.Range(-ExplodeDist, ExplodeDist);
 
         GameObject chunk = Instantiate(Chunks[randomIndex], spawnPos, transform.rotation);
+        WaveManager.Instance.AddEnemy(chunk);
+        Debug.Log("chunks added");
         Vector2 dir = (spawnPos - newPos).normalized;
 
         Rigidbody2D rb = chunk.GetComponent<Rigidbody2D>();

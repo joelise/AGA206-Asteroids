@@ -15,22 +15,46 @@ public class WaveManager : MonoBehaviour
     public bool WaveStarted;
     public bool WaveComplete;
     public int WaveStrength;
+    private float strengthIncrement = 1.25f;
     public float WaveDelayTimer = 0f;
     public int CurrentWave = 0;
     public float waveDelay = 5f;
+    public static WaveManager Instance;
     [Header("Enemies")]
     public List<EnemyOption> AllEnemies = new List<EnemyOption>();
     public List<GameObject> spawnedEnemies = new List<GameObject>();
     public float PushForce = 100f;
     public float Inaccuracy = 2f;
+    private bool enemiesSpawned;
 
-    
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
         WaveStarted = false;
         WaveComplete = false;
+        enemiesSpawned = false;
     }
+
+    public void AddEnemy(GameObject enemy)
+    {
+        if (!spawnedEnemies.Contains(enemy))
+        {
+            spawnedEnemies.Add(enemy);
+        }
+    }
+
+    public void RemoveEnemy(GameObject enemy)
+    {
+        if (spawnedEnemies.Contains(enemy))
+        {
+            spawnedEnemies.Remove(enemy);
+        }
+    }
+
 
    
     
@@ -59,6 +83,7 @@ public class WaveManager : MonoBehaviour
             spawnedEnemies.Add(enemy);
 
             RemainingStrength -= selected.Strength;
+            enemiesSpawned = true;
         }
 
   
@@ -110,18 +135,25 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        WaveDelayTimer += Time.deltaTime;
+        WaveDelayTimer += Time.deltaTime; 
         StartWave();
         if (Input.GetKeyDown(KeyCode.Y))
         {
             Spawner();
         }
         
-        if (WaveStarted && AllEnemiesDefeated())
+        if (enemiesSpawned == true && AllEnemiesDefeated())
         {
             WaveComplete = true;
             WaveStarted = false;
            
         }
+    }
+
+    public float CalculateWaveStrength()
+    {
+        float startingStrength = 10f;
+
+        return startingStrength + (CurrentWave - 1) * strengthIncrement;
     }
 }

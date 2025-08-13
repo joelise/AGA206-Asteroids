@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1097162840566670743}
   - component: {fileID: -2240664773775863928}
   - component: {fileID: 3496356379098156637}
+  - component: {fileID: -7099089577842542949}
   m_Layer: 0
   m_Name: Asteroid_Med01
   m_TagString: Untagged
@@ -200,10 +201,12 @@ MonoBehaviour:
   - {fileID: 3151577066346558193, guid: 690e19facf253164d90860b186eaa83d, type: 3}
   - {fileID: 184248315183814101, guid: c5c09d326d2ff7a4b969a560826b0610, type: 3}
   - {fileID: 6538966118732436153, guid: c61ce6c7ed11fa94094d38dc3682a189, type: 3}
+  WaveManager: {fileID: -5662145395583921652, guid: 41ebcbd242a994a4ebdab54a77baade7, type: 3}
   ChunksMin: 0
   ChunksMax: 4
   ExplodeDist: 0.5
   ExplosionForce: 10
+  ScoreValue: 10
 --- !u!114 &3496356379098156637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,3 +219,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2380cfe428c756646a4b04bff4899fe6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7099089577842542949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611047589723302051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db170a032572e7c4aa36ba8c56767949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WaveStarted: 0
+  WaveComplete: 0
+  WaveStrength: 0
+  WaveDelayTimer: 0
+  CurrentWave: 0
+  waveDelay: 5
+  AllEnemies: []
+  spawnedEnemies: []
+  PushForce: 100
+  Inaccuracy: 2
