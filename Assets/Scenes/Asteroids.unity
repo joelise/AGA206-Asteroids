@@ -1849,7 +1849,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WaveInProgress: 0
   WaveStrength: 2
-  WaveDelayTimer: 0
   CurrentWave: 1
   WaveDelay: 5
   AllEnemies:
@@ -3282,8 +3281,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9f5a65fe2c9764d9f1f7f22db08cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnginePower: 15
-  TurnPower: 1.5
+  EnginePower: 1
+  TurnPower: 120
+  MaxSpeed: 2
+  AngularDrag: 2
+  LinearDrag: 3
+  AccelSmoothing: 5
   HealthMax: 3
   HealthCurrent: 0
   BulletPreFab: {fileID: 2142876235958566794, guid: 771f2c95846015c40be4265516dafc3f, type: 3}
