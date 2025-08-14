@@ -76,7 +76,7 @@ public class Asteroids : MonoBehaviour
         spawnPos.y += Random.Range(-ExplodeDist, ExplodeDist);
 
         GameObject chunk = Instantiate(Chunks[randomIndex], spawnPos, transform.rotation);
-        WaveManager.Instance.AddEnemy(chunk);
+        WaveManager.instance.AddEnemy(chunk);
         Debug.Log("chunks added");
         Vector2 dir = (spawnPos - newPos).normalized;
 

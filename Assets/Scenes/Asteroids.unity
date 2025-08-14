@@ -1847,12 +1847,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db170a032572e7c4aa36ba8c56767949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaveStarted: 0
-  WaveComplete: 0
-  WaveStrength: 5
+  WaveInProgress: 0
+  WaveStrength: 2
   WaveDelayTimer: 0
-  CurrentWave: 0
-  waveDelay: 5
+  CurrentWave: 1
+  WaveDelay: 5
   AllEnemies:
   - EnemyPrefab: {fileID: 7277008502067443425, guid: 41ebcbd242a994a4ebdab54a77baade7, type: 3}
     Strength: 3

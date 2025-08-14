@@ -9,102 +9,58 @@ public class EnemyOption
     public int Strength;
     public int UnlockWave;
 }
-public class WaveManager : MonoBehaviour
+public class WaveManager : Singleton<WaveManager>
 {
     [Header("Wave")]
-    public bool WaveStarted;
-    public bool WaveComplete;
+    public bool WaveInProgress = false;
     public int WaveStrength;
     private float strengthIncrement = 1.25f;
-    public float WaveDelayTimer = 0f;
-    public int CurrentWave = 0;
-    public float waveDelay = 5f;
-    public static WaveManager Instance;
+    public int CurrentWave = 1;
+    public float WaveDelay = 5f;
     [Header("Enemies")]
     public List<EnemyOption> AllEnemies = new List<EnemyOption>();
     public List<GameObject> spawnedEnemies = new List<GameObject>();
     public float PushForce = 100f;
     public float Inaccuracy = 2f;
-    private bool enemiesSpawned;
+    
 
-    private void Awake()
-    {
-        Instance = this;
-    }
 
     private void Start()
     {
-        WaveStarted = false;
-        WaveComplete = false;
-        enemiesSpawned = false;
+        StartCoroutine(WaveRoutine());
     }
 
     public void AddEnemy(GameObject enemy)
     {
+        // If the enemy is not already in the List, Add Enemy
+
         if (!spawnedEnemies.Contains(enemy))
         {
             spawnedEnemies.Add(enemy);
         }
     }
 
-    public void RemoveEnemy(GameObject enemy)
+    /*public void RemoveEnemy(GameObject enemy)
     {
         if (spawnedEnemies.Contains(enemy))
         {
             spawnedEnemies.Remove(enemy);
         }
+    }*/
+
+    public bool AllEnemiesDefeated()
+    {
+        // Checks list amount, if list is empty AllEnemiesDefeated = true
+
+        spawnedEnemies.RemoveAll(e => e == null); 
+        return spawnedEnemies.Count == 0;
+
     }
 
-
-   
-    
-
-    public void Spawner()
+    public float CalculateWaveStrength()
     {
-        int RemainingStrength = WaveStrength;
-        List<EnemyOption> avaliableEnemies = AllEnemies.FindAll(e => e.UnlockWave <= CurrentWave);
-
-        while (RemainingStrength > 0)
-        {
-            List<EnemyOption> validOptions = avaliableEnemies.FindAll(e => e.Strength <= RemainingStrength);
-
-            if (validOptions.Count == 0)
-                break;
-
-            EnemyOption selected = validOptions[Random.Range(0, validOptions.Count)];
-
-            Vector3 spawnPoint = RandomOffScreenPoint();
-            spawnPoint.z = transform.position.z;
-
-            GameObject enemy = Instantiate(selected.EnemyPrefab, spawnPoint, transform.rotation);
-            Vector2 force = PushDirection(spawnPoint) * PushForce;
-            Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
-            rb.AddForce(force);
-            spawnedEnemies.Add(enemy);
-
-            RemainingStrength -= selected.Strength;
-            enemiesSpawned = true;
-        }
-
-  
-    }
-
-    public void StartWave()
-    {
-        if (WaveDelayTimer >= waveDelay)
-        {
-            WaveStarted = true;
-            CurrentWave++;
-
-        }
-
-        if (WaveStarted)
-        {
-            //Debug.Log("Wave started");
-            WaveDelayTimer = 0f;
-            
-
-        }
+        float startingStrength = 10f;
+        return startingStrength + (CurrentWave - 1) * strengthIncrement; // Calculates the wave strength and returns a float
     }
 
     private Vector3 RandomOffScreenPoint()
@@ -125,35 +81,53 @@ public class WaveManager : MonoBehaviour
         return direction;
     }
 
-    public bool AllEnemiesDefeated()
+    public void SpawnEnemies()
     {
-        spawnedEnemies.RemoveAll(e => e == null);
-        return spawnedEnemies.Count == 0;
-    }
+        int RemainingStrength = WaveStrength;   // Calculates the strength of the wave
+        List<EnemyOption> availableEnemies = AllEnemies.FindAll(e => e.UnlockWave <= CurrentWave);  // Finds enemies that are available to spawn at the current wave
 
-   
-
-    private void Update()
-    {
-        WaveDelayTimer += Time.deltaTime; 
-        StartWave();
-        if (Input.GetKeyDown(KeyCode.Y))
+        while (RemainingStrength > 0)   // Finds available enemies to spawn until the wave strength is reached
         {
-            Spawner();
-        }
-        
-        if (enemiesSpawned == true && AllEnemiesDefeated())
-        {
-            WaveComplete = true;
-            WaveStarted = false;
-           
+            List<EnemyOption> validOptions = availableEnemies.FindAll(e => e.Strength <= RemainingStrength);    // Finds enemies that are available to spawn with the wave strength
+
+            if (validOptions.Count == 0)    // If there are no enemies avaliable, stops the loop
+                break;                  
+
+            EnemyOption selected = validOptions[Random.Range(0, validOptions.Count)];   // Selects an available enemy to spawn
+
+            // Random spawn location
+            Vector3 spawnPoint = RandomOffScreenPoint();
+            spawnPoint.z = transform.position.z;
+
+            // Spawns and pushes the selected enemy
+            GameObject enemy = Instantiate(selected.EnemyPrefab, spawnPoint, transform.rotation);
+            Vector2 force = PushDirection(spawnPoint) * PushForce;
+            Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
+            rb.AddForce(force);
+            spawnedEnemies.Add(enemy);  // Adds chosen enemy to a list of spawned enemies
+
+            RemainingStrength -= selected.Strength;     // Subtracts the strength of the chosen enemy from the wave strength, updates remaining strength
+         
         }
     }
 
-    public float CalculateWaveStrength()
+    public IEnumerator WaveRoutine()
     {
-        float startingStrength = 10f;
+        yield return new WaitForSeconds(WaveDelay);     // Delay before wave starts
 
-        return startingStrength + (CurrentWave - 1) * strengthIncrement;
+        while (true)    // Allows endless waves
+        {
+            WaveInProgress = true;
+            WaveStrength = Mathf.RoundToInt(CalculateWaveStrength());   // Rounds the result of the wave strength to the nearest int
+            SpawnEnemies();
+
+            yield return new WaitUntil(() => AllEnemiesDefeated());     // Waits until all the enemies have been defeated
+
+            CurrentWave++;      // Increments the wave number
+            WaveInProgress = false;
+
+            yield return new WaitForSeconds(WaveDelay);     // Delay before starting the next wave
+        }
     }
+
 }
