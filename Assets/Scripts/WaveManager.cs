@@ -59,7 +59,7 @@ public class WaveManager : Singleton<WaveManager>
 
     public float CalculateWaveStrength()
     {
-        float startingStrength = 10f;
+        float startingStrength = 3f;
         return startingStrength + (CurrentWave - 1) * strengthIncrement; // Calculates the wave strength and returns a float
     }
 
@@ -67,7 +67,7 @@ public class WaveManager : Singleton<WaveManager>
     {
         Vector2 randomPos = Random.insideUnitCircle;
         Vector2 direction = randomPos.normalized;
-        Vector2 finalPos = (Vector2)transform.position + direction * 1f;
+        Vector2 finalPos = (Vector2)transform.position + direction * 2f;
 
         return Camera.main.ViewportToWorldPoint(finalPos);
     }
@@ -98,10 +98,12 @@ public class WaveManager : Singleton<WaveManager>
             // Random spawn location
             Vector3 spawnPoint = RandomOffScreenPoint();
             spawnPoint.z = transform.position.z;
+            
 
             // Spawns and pushes the selected enemy
             GameObject enemy = Instantiate(selected.EnemyPrefab, spawnPoint, transform.rotation);
             Vector2 force = PushDirection(spawnPoint) * PushForce;
+            Debug.Log(PushDirection(spawnPoint));
             Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
             rb.AddForce(force);
             spawnedEnemies.Add(enemy);  // Adds chosen enemy to a list of spawned enemies

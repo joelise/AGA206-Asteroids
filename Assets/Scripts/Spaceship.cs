@@ -6,14 +6,14 @@ using UnityEngine;
 public class Spaceship : MonoBehaviour
 {
     [Header("Movement")]
-    public float EnginePower = 1f;
-    public float TurnPower = 150f;
-    public float MaxSpeed = 2f;
+    public float EnginePower = 2f;
+    public float TurnPower = 200f;
+    public float MaxSpeed = 3f;
     public float AngularDrag = 1f;
-    public float LinearDrag = 1f;
-    public float AccelSmoothing = 2f;
-    private float smoothVertical;
-    private float currentThrust;
+    public float LinearDrag = 3f;
+    //public float AccelSmoothing = 2f;
+    //private float smoothVertical;
+    //private float currentThrust;
 
     [Header("Health")]
     public int HealthMax = 3;
@@ -93,7 +93,13 @@ public class Spaceship : MonoBehaviour
         //smoothVertical = Mathf.Lerp(smoothVertical, amount * EnginePower, Time.deltaTime * AccelSmoothing);
         //currentThrust = Mathf.Lerp(currentThrust, smoothVertical * EnginePower, Time.deltaTime * AccelSmoothing);
 
-        rb2D.AddForce(transform.up * currentThrust, ForceMode2D.Force);
+        if (amount != 0)
+        {
+            Vector2 thrust = transform.up * EnginePower * amount;
+            rb2D.AddForce(thrust, ForceMode2D.Force);
+        }
+
+        //rb2D.AddForce(transform.up * currentThrust, ForceMode2D.Force);
         
         if(rb2D.linearVelocity.magnitude > MaxSpeed)
         {
@@ -104,10 +110,10 @@ public class Spaceship : MonoBehaviour
 
     private void ApplyTorque(float amount)
     {
-        //rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -amount * TurnPower, Time.deltaTime * 1f);
+        rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -amount * TurnPower, Time.deltaTime * 2f);
         //Debug.Log("Torque amount is " + amount);
-        float torque = amount * TurnPower * Time.deltaTime;
-        rb2D.AddTorque(-torque);
+       // float torque = amount * TurnPower * Time.deltaTime;
+        //rb2D.AddTorque(-torque);
     }
 
     public void TakeDamage(int damage)
