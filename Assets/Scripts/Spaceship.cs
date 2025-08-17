@@ -25,6 +25,8 @@ public class Spaceship : MonoBehaviour
     public float FiringRate = 0.33f;
     private float fireTimer = 0f;
 
+    [Header("PowerUps")]
+
     [Header("Sound")]
     public SoundPlayer HitSounds;
 
