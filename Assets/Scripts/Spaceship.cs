@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -26,6 +27,10 @@ public class Spaceship : MonoBehaviour
     private float fireTimer = 0f;
 
     [Header("PowerUps")]
+    public bool HasPowerUp = false;
+    public float PowerUpDuration = 10f;
+    public float ScatterAngle = 15f;
+    public bool ScatterShotActive = false;
 
     [Header("Sound")]
     public SoundPlayer HitSounds;
@@ -46,6 +51,9 @@ public class Spaceship : MonoBehaviour
     public bool IsPaused = false;
 
     private Rigidbody2D rb2D;
+    public SpriteRenderer spriteRenderer;
+    public new PolygonCollider2D collider;
+    private bool isFiring;
 
 
     void Start()
@@ -55,6 +63,8 @@ public class Spaceship : MonoBehaviour
         rb2D.linearDamping = LinearDrag;
         HealthCurrent = HealthMax;
         HighScore = GetHighScore();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        collider = GetComponent<PolygonCollider2D>();
     }
 
     void Update()
@@ -79,7 +89,7 @@ public class Spaceship : MonoBehaviour
 
     private void UpdateFiring()
     {
-        bool isFiring = Input.GetButton("Fire1");
+        isFiring = Input.GetButton("Fire1");
         fireTimer -= Time.deltaTime;    //Decrement the timer
 
         
@@ -199,5 +209,79 @@ public class Spaceship : MonoBehaviour
             Time.timeScale = 1f; // Resumes in game time
         }
         
+    }
+
+    public IEnumerator Invincibility()
+    {
+        collider.enabled = false;
+        HasPowerUp = true;
+
+        Color[] rainbowColors = new Color[]
+        {
+            Color.red, Color.orange, Color.yellow, Color.green, Color.cyan, Color.blue, Color.purple, Color.magenta
+        };
+
+        float flashSpeed = 0.1f;
+        float elapsed = 0f;
+        int colorIndex = 0;
+
+        while (elapsed < PowerUpDuration)
+        {
+            spriteRenderer.color = rainbowColors[colorIndex];
+            colorIndex = (colorIndex + 1) % rainbowColors.Length;
+
+            yield return new WaitForSeconds(flashSpeed);
+            elapsed += flashSpeed;
+        }
+       
+        spriteRenderer.color = Color.white;
+        collider.enabled = true;
+        HasPowerUp = false;
+    }
+
+    public IEnumerator ScatterShot()
+    {
+        ScatterShotActive = true;
+        Quaternion leftRotation = transform.rotation * Quaternion.Euler(0, 0, ScatterAngle);
+        Quaternion rightRotation = transform.rotation * Quaternion.Euler(0, 0, -ScatterAngle);
+
+        if (Input.GetButtonDown("Fire1") && isFiring)
+        {
+            ScatterShotActive = Input.GetButtonDown("Fire1");
+            GameObject leftBullet = Instantiate(BulletPreFab, transform.position, leftRotation);
+            Rigidbody2D rbLeft = leftBullet.GetComponent<Rigidbody2D>();
+            Vector2 force = transform.up * BulletSpeed;
+            rbLeft.AddForce(force);
+
+            
+            GameObject rightBullet = Instantiate(BulletPreFab, transform.position, rightRotation);
+            Rigidbody2D rbRight = rightBullet.GetComponent<Rigidbody2D>();
+            //Vector2 force = transform.up * BulletSpeed;
+            rbRight.AddForce(force);
+        }
+
+        yield return new WaitForSeconds(PowerUpDuration);
+        ScatterShotActive = false;
+        HasPowerUp = false;
+    }
+
+    
+
+    public void ApplyPowerUp(PowerUpType powerUp)
+    {
+        switch (powerUp)
+        {
+            case PowerUpType.Invincibility:
+                Debug.Log("Invincibility active");
+                StartCoroutine(Invincibility());
+                break;
+
+            case PowerUpType.ScatterShot:
+                Debug.Log("ScatterShot active");
+                StartCoroutine(ScatterShot());
+                break;
+
+                
+        }
     }
 }

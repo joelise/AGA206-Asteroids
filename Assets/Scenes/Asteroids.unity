@@ -628,10 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf260867b742a04cb356f3c221e3803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PowerUp: 1
-  Ship: {fileID: 1770924884}
-  Duration: 10
-  HasPowerUp: 0
+  powerUpType: 1
 --- !u!60 &187331246
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -662,7 +659,7 @@ PolygonCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -3485,6 +3482,8 @@ MonoBehaviour:
   BulletPreFab: {fileID: 2142876235958566794, guid: 771f2c95846015c40be4265516dafc3f, type: 3}
   BulletSpeed: 100
   FiringRate: 0.33
+  HasPowerUp: 0
+  PowerUpDuration: 10
   HitSounds: {fileID: 1770924888}
   Flash: {fileID: 463394312}
   GameOverUI: {fileID: 1395467539}
@@ -3494,6 +3493,8 @@ MonoBehaviour:
   HighScore: 0
   CameraShake: {fileID: 1585268689}
   IsPaused: 0
+  spriteRenderer: {fileID: 0}
+  collider: {fileID: 0}
 --- !u!60 &1770924885
 PolygonCollider2D:
   m_ObjectHideFlags: 0
