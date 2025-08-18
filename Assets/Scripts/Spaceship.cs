@@ -3,6 +3,7 @@ using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Spaceship : MonoBehaviour
 {
@@ -29,8 +30,9 @@ public class Spaceship : MonoBehaviour
     [Header("PowerUps")]
     public bool HasPowerUp = false;
     public float PowerUpDuration = 10f;
-    public float ScatterAngle = 15f;
+    public float ScatterAngle = 30f;
     public bool ScatterShotActive = false;
+    public int NumberOfBullets = 3;
 
     [Header("Sound")]
     public SoundPlayer HitSounds;
@@ -92,10 +94,17 @@ public class Spaceship : MonoBehaviour
         isFiring = Input.GetButton("Fire1");
         fireTimer -= Time.deltaTime;    //Decrement the timer
 
-        
-        if (isFiring && fireTimer <= 0 && IsPaused == false)
+
+        if (isFiring && fireTimer <= 0 && IsPaused == false && ScatterShotActive == false)
         {
             FireBullet();
+            fireTimer = FiringRate;
+        }
+
+        if (isFiring && fireTimer <= 0 && IsPaused == false && ScatterShotActive)
+        {
+            FireBullet();
+            ScatterShot();
             fireTimer = FiringRate;
         }
     }
@@ -239,32 +248,34 @@ public class Spaceship : MonoBehaviour
         HasPowerUp = false;
     }
 
-    public IEnumerator ScatterShot()
+    public IEnumerator ScatterShotRoutine()
     {
         ScatterShotActive = true;
-        Quaternion leftRotation = transform.rotation * Quaternion.Euler(0, 0, ScatterAngle);
-        Quaternion rightRotation = transform.rotation * Quaternion.Euler(0, 0, -ScatterAngle);
-
-        if (Input.GetButtonDown("Fire1") && isFiring)
-        {
-            ScatterShotActive = Input.GetButtonDown("Fire1");
-            GameObject leftBullet = Instantiate(BulletPreFab, transform.position, leftRotation);
-            Rigidbody2D rbLeft = leftBullet.GetComponent<Rigidbody2D>();
-            Vector2 force = transform.up * BulletSpeed;
-            rbLeft.AddForce(force);
-
-            
-            GameObject rightBullet = Instantiate(BulletPreFab, transform.position, rightRotation);
-            Rigidbody2D rbRight = rightBullet.GetComponent<Rigidbody2D>();
-            //Vector2 force = transform.up * BulletSpeed;
-            rbRight.AddForce(force);
-        }
 
         yield return new WaitForSeconds(PowerUpDuration);
+
         ScatterShotActive = false;
         HasPowerUp = false;
     }
 
+    public void ScatterShot()
+    {
+        Quaternion leftRotation = transform.rotation * Quaternion.Euler(0, 0, ScatterAngle);
+        Quaternion rightRotation = transform.rotation * Quaternion.Euler(0, 0, -ScatterAngle);
+
+        GameObject leftBullet = Instantiate(BulletPreFab, transform.position, leftRotation);
+        Rigidbody2D rbLeft = leftBullet.GetComponent<Rigidbody2D>();
+        Vector2 leftForce = leftBullet.transform.up * BulletSpeed;
+        rbLeft.AddForce(leftForce);
+
+
+        GameObject rightBullet = Instantiate(BulletPreFab, transform.position, rightRotation);
+        Rigidbody2D rbRight = rightBullet.GetComponent<Rigidbody2D>();
+        Vector2 rightForce = rightBullet.transform.up * BulletSpeed;
+        rbRight.AddForce(rightForce);
+       
+    }
+  
     
 
     public void ApplyPowerUp(PowerUpType powerUp)
@@ -278,7 +289,7 @@ public class Spaceship : MonoBehaviour
 
             case PowerUpType.ScatterShot:
                 Debug.Log("ScatterShot active");
-                StartCoroutine(ScatterShot());
+                StartCoroutine(ScatterShotRoutine());
                 break;
 
                 

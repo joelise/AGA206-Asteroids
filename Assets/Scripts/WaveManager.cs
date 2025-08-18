@@ -103,7 +103,7 @@ public class WaveManager : Singleton<WaveManager>
             // Spawns and pushes the selected enemy
             GameObject enemy = Instantiate(selected.EnemyPrefab, spawnPoint, transform.rotation);
             Vector2 force = PushDirection(spawnPoint) * PushForce;
-            Debug.Log(PushDirection(spawnPoint));
+          
             Rigidbody2D rb = enemy.GetComponent<Rigidbody2D>();
             rb.AddForce(force);
             spawnedEnemies.Add(enemy);  // Adds chosen enemy to a list of spawned enemies

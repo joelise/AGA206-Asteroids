@@ -20,8 +20,9 @@ public class PowerUps : MonoBehaviour
         if (ship != null)
         {
             ship.ApplyPowerUp(powerUpType);
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
+       
     }
    
 }

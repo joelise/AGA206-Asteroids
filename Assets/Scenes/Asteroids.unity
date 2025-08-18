@@ -628,7 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf260867b742a04cb356f3c221e3803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpType: 1
+  powerUpType: 2
 --- !u!60 &187331246
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3472,9 +3472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa9f5a65fe2c9764d9f1f7f22db08cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnginePower: 3
+  EnginePower: 1.5
   TurnPower: 200
-  MaxSpeed: 3.5
+  MaxSpeed: 2
   AngularDrag: 1
   LinearDrag: 1
   HealthMax: 3
@@ -3484,6 +3484,9 @@ MonoBehaviour:
   FiringRate: 0.33
   HasPowerUp: 0
   PowerUpDuration: 10
+  ScatterAngle: 15
+  ScatterShotActive: 0
+  NumberOfBullets: 3
   HitSounds: {fileID: 1770924888}
   Flash: {fileID: 463394312}
   GameOverUI: {fileID: 1395467539}
