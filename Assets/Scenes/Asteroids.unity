@@ -628,7 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf260867b742a04cb356f3c221e3803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpType: 2
+  powerUpType: 0
 --- !u!60 &187331246
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3487,6 +3487,9 @@ MonoBehaviour:
   ScatterAngle: 15
   ScatterShotActive: 0
   NumberOfBullets: 3
+  LaserBeamPrefab: {fileID: 2140825801228093452, guid: 9c956d7fc9f086a4d9bf390c636c5370, type: 3}
+  activeLaser: {fileID: 0}
+  LaserShotActive: 0
   HitSounds: {fileID: 1770924888}
   Flash: {fileID: 463394312}
   GameOverUI: {fileID: 1395467539}

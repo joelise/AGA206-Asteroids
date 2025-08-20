@@ -33,6 +33,10 @@ public class Spaceship : MonoBehaviour
     public float ScatterAngle = 30f;
     public bool ScatterShotActive = false;
     public int NumberOfBullets = 3;
+    public GameObject LaserBeamPrefab;
+    //public Transform FirePoint;
+    public GameObject activeLaser;
+    public bool LaserShotActive = false;
 
     [Header("Sound")]
     public SoundPlayer HitSounds;
@@ -95,7 +99,7 @@ public class Spaceship : MonoBehaviour
         fireTimer -= Time.deltaTime;    //Decrement the timer
 
 
-        if (isFiring && fireTimer <= 0 && IsPaused == false && ScatterShotActive == false)
+        if (isFiring && fireTimer <= 0 && IsPaused == false && LaserShotActive == false)
         {
             FireBullet();
             fireTimer = FiringRate;
@@ -107,6 +111,8 @@ public class Spaceship : MonoBehaviour
             ScatterShot();
             fireTimer = FiringRate;
         }
+
+   
     }
 
     private void ApplyThrust(float amount)
@@ -275,6 +281,31 @@ public class Spaceship : MonoBehaviour
         rbRight.AddForce(rightForce);
        
     }
+
+    public void LaserShot()
+    {
+
+        activeLaser = Instantiate(LaserBeamPrefab, transform.position, transform.rotation, transform);
+        activeLaser.GetComponent<LaserBeam>().GrowLaser();
+
+    }
+
+    public IEnumerator LaserShotRoutine()
+    {
+        HasPowerUp = true;
+        LaserShotActive = true;
+        activeLaser = Instantiate(LaserBeamPrefab, transform.position, transform.rotation, transform);
+        activeLaser.GetComponent<LaserBeam>().GrowLaser();
+
+        yield return new WaitForSeconds(PowerUpDuration);
+       
+
+        LaserShotActive = false;
+        HasPowerUp = false;
+        activeLaser.GetComponent<LaserBeam>().ShrinkLaser();
+    }
+
+    
   
     
 
@@ -290,6 +321,11 @@ public class Spaceship : MonoBehaviour
             case PowerUpType.ScatterShot:
                 Debug.Log("ScatterShot active");
                 StartCoroutine(ScatterShotRoutine());
+                break;
+
+            case PowerUpType.LaserShot:
+                Debug.Log("LaserShot active");
+                StartCoroutine(LaserShotRoutine());
                 break;
 
                 
