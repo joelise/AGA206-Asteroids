@@ -188,12 +188,14 @@ MonoBehaviour:
   SpawnValue: 1
   CollisionDamage: 1
   HealthMax: 3
+  OnScreen: 0
   Chunks: []
   ChunksMin: 0
   ChunksMax: 4
   ExplodeDist: 0.5
   ExplosionForce: 10
   ScoreValue: 10
+  renderer: {fileID: 6093109109760360233}
 --- !u!114 &7604331443438698906
 MonoBehaviour:
   m_ObjectHideFlags: 0

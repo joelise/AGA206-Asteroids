@@ -7,6 +7,7 @@ public class Asteroids : MonoBehaviour
     public int CollisionDamage = 1;
     public int HealthMax = 3;
     private int HealthCurrent;
+    public bool OnScreen = false;
     public GameObject[] Chunks;
     [Header("Explosion Stuff")]
     public int ChunksMin = 0;
@@ -16,10 +17,12 @@ public class Asteroids : MonoBehaviour
     [Header("Scoring")]
     public int ScoreValue = 10;
 
+    public new SpriteRenderer renderer;
+
         
     private void Start()
     {
-        HealthCurrent = HealthMax;
+        HealthCurrent = HealthMax; 
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -34,7 +37,11 @@ public class Asteroids : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        HealthCurrent -= damage;
+        if (OnScreen)
+        {
+            HealthCurrent -= damage;
+        }
+        
 
         if(HealthCurrent <= 0)
         {
@@ -82,6 +89,14 @@ public class Asteroids : MonoBehaviour
 
         Rigidbody2D rb = chunk.GetComponent<Rigidbody2D>();
         rb.AddForce(dir * ExplosionForce);
+    }
+
+    private void Update()
+    {
+        if (renderer.isVisible)
+        {
+            OnScreen = true;
+        }
     }
 
 }

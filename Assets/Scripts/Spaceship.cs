@@ -31,12 +31,11 @@ public class Spaceship : MonoBehaviour
     public bool HasPowerUp = false;
     public float PowerUpDuration = 10f;
     public float ScatterAngle = 30f;
-    public bool ScatterShotActive = false;
     public int NumberOfBullets = 3;
     public GameObject LaserBeamPrefab;
-    //public Transform FirePoint;
+    public Transform FirePoint;
     public GameObject activeLaser;
-    public bool LaserShotActive = false;
+    public PowerUpType CurrentPowerUp;
 
     [Header("Sound")]
     public SoundPlayer HitSounds;
@@ -71,6 +70,7 @@ public class Spaceship : MonoBehaviour
         HighScore = GetHighScore();
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider = GetComponent<PolygonCollider2D>();
+        CurrentPowerUp = PowerUpType.Empty;
     }
 
     void Update()
@@ -98,17 +98,25 @@ public class Spaceship : MonoBehaviour
         isFiring = Input.GetButton("Fire1");
         fireTimer -= Time.deltaTime;    //Decrement the timer
 
+        if (!isFiring || fireTimer >= 0 || IsPaused == true)
+            return;
 
-        if (isFiring && fireTimer <= 0 && IsPaused == false && LaserShotActive == false)
+        if (CurrentPowerUp == PowerUpType.Empty)
         {
             FireBullet();
             fireTimer = FiringRate;
         }
 
-        if (isFiring && fireTimer <= 0 && IsPaused == false && ScatterShotActive)
+        if (CurrentPowerUp == PowerUpType.ScatterShot)
         {
             FireBullet();
             ScatterShot();
+            fireTimer = FiringRate;
+        }
+
+        if (CurrentPowerUp == PowerUpType.LaserShot)
+        {
+            FireBullet();
             fireTimer = FiringRate;
         }
 
@@ -231,6 +239,7 @@ public class Spaceship : MonoBehaviour
         collider.enabled = false;
         HasPowerUp = true;
 
+        // Array of colours to cycle through
         Color[] rainbowColors = new Color[]
         {
             Color.red, Color.orange, Color.yellow, Color.green, Color.cyan, Color.blue, Color.purple, Color.magenta
@@ -242,26 +251,24 @@ public class Spaceship : MonoBehaviour
 
         while (elapsed < PowerUpDuration)
         {
-            spriteRenderer.color = rainbowColors[colorIndex];
-            colorIndex = (colorIndex + 1) % rainbowColors.Length;
+            spriteRenderer.color = rainbowColors[colorIndex];       // Changes sprite colour
+            colorIndex = (colorIndex + 1) % rainbowColors.Length;   // Cycles through the length of the colour array
 
             yield return new WaitForSeconds(flashSpeed);
             elapsed += flashSpeed;
         }
+
+        CurrentPowerUp = PowerUpType.Empty;
        
         spriteRenderer.color = Color.white;
         collider.enabled = true;
-        HasPowerUp = false;
     }
 
     public IEnumerator ScatterShotRoutine()
     {
-        ScatterShotActive = true;
-
         yield return new WaitForSeconds(PowerUpDuration);
 
-        ScatterShotActive = false;
-        HasPowerUp = false;
+        CurrentPowerUp = PowerUpType.Empty;
     }
 
     public void ScatterShot()
@@ -269,12 +276,13 @@ public class Spaceship : MonoBehaviour
         Quaternion leftRotation = transform.rotation * Quaternion.Euler(0, 0, ScatterAngle);
         Quaternion rightRotation = transform.rotation * Quaternion.Euler(0, 0, -ScatterAngle);
 
+        // Spawns and pushes left bullet
         GameObject leftBullet = Instantiate(BulletPreFab, transform.position, leftRotation);
         Rigidbody2D rbLeft = leftBullet.GetComponent<Rigidbody2D>();
         Vector2 leftForce = leftBullet.transform.up * BulletSpeed;
         rbLeft.AddForce(leftForce);
 
-
+        // Spawn and pushes right bullet
         GameObject rightBullet = Instantiate(BulletPreFab, transform.position, rightRotation);
         Rigidbody2D rbRight = rightBullet.GetComponent<Rigidbody2D>();
         Vector2 rightForce = rightBullet.transform.up * BulletSpeed;
@@ -282,26 +290,18 @@ public class Spaceship : MonoBehaviour
        
     }
 
-    public void LaserShot()
-    {
 
-        activeLaser = Instantiate(LaserBeamPrefab, transform.position, transform.rotation, transform);
-        activeLaser.GetComponent<LaserBeam>().GrowLaser();
-
-    }
 
     public IEnumerator LaserShotRoutine()
     {
-        HasPowerUp = true;
-        LaserShotActive = true;
-        activeLaser = Instantiate(LaserBeamPrefab, transform.position, transform.rotation, transform);
+        
+        activeLaser = Instantiate(LaserBeamPrefab, FirePoint.position, transform.rotation, transform);
         activeLaser.GetComponent<LaserBeam>().GrowLaser();
 
         yield return new WaitForSeconds(PowerUpDuration);
-       
 
-        LaserShotActive = false;
-        HasPowerUp = false;
+        CurrentPowerUp = PowerUpType.Empty;
+        
         activeLaser.GetComponent<LaserBeam>().ShrinkLaser();
     }
 
@@ -311,6 +311,7 @@ public class Spaceship : MonoBehaviour
 
     public void ApplyPowerUp(PowerUpType powerUp)
     {
+        CurrentPowerUp = powerUp;
         switch (powerUp)
         {
             case PowerUpType.Invincibility:

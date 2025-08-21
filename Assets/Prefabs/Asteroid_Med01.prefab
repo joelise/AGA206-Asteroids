@@ -196,6 +196,7 @@ MonoBehaviour:
   SpawnValue: 2
   CollisionDamage: 1
   HealthMax: 3
+  OnScreen: 0
   Chunks:
   - {fileID: 3151577066346558193, guid: 690e19facf253164d90860b186eaa83d, type: 3}
   - {fileID: 184248315183814101, guid: c5c09d326d2ff7a4b969a560826b0610, type: 3}
@@ -205,6 +206,7 @@ MonoBehaviour:
   ExplodeDist: 0.5
   ExplosionForce: 10
   ScoreValue: 10
+  renderer: {fileID: 5512007317395828143}
 --- !u!114 &3496356379098156637
 MonoBehaviour:
   m_ObjectHideFlags: 0

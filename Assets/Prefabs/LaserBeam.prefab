@@ -32,6 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2804232156994315119}
+  - {fileID: 5316735433747113938}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &1496431010512728047
@@ -68,8 +69,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0012859802, y: 0.36101314}
-  m_Size: {x: 0.07207362, y: 0.6215397}
+  m_Offset: {x: -0.0012859802, y: 0.306256}
+  m_Size: {x: 0.07207362, y: 0.6112722}
   m_Direction: 0
 --- !u!114 &-3262905571640845342
 MonoBehaviour:
@@ -87,8 +88,7 @@ MonoBehaviour:
   Damage: 2
   ExplosionPrefab: {fileID: 9098456942500868576, guid: 70e201bf0ab199c46accb62442885505, type: 3}
   Duration: 0.5
-  OriginalScale: {x: 0, y: 0, z: 0}
-  GrowthScale: {x: 1, y: 15, z: 1}
+  FirePoint: {fileID: 5316735433747113938}
 --- !u!1 &6285311156227258514
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,3 +176,34 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &7271317995320712817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5316735433747113938}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5316735433747113938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7271317995320712817}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8493720798982069578}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

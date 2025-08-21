@@ -3,6 +3,7 @@ using UnityEngine;
 
 public enum PowerUpType
 {
+    Empty = -1,
     LaserShot,
     Invincibility,
     ScatterShot,
