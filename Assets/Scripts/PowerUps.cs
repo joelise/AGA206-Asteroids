@@ -7,7 +7,8 @@ public enum PowerUpType
     LaserShot,
     Invincibility,
     ScatterShot,
-    ClearWave
+    ClearWave,
+    FullHealth
 }
 
 public class PowerUps : MonoBehaviour

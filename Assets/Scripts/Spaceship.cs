@@ -102,7 +102,7 @@ public class Spaceship : MonoBehaviour
         if (!isFiring || fireTimer >= 0 || IsPaused == true)
             return;
 
-        if (CurrentPowerUp == PowerUpType.Empty)
+        if (CurrentPowerUp != PowerUpType.ScatterShot || CurrentPowerUp != PowerUpType.LaserShot)
         {
             FireBullet();
             fireTimer = FiringRate;
@@ -338,6 +338,12 @@ public class Spaceship : MonoBehaviour
         CurrentPowerUp = PowerUpType.Empty;
     }
 
+    public void FullHealth()
+    {
+        HealthCurrent = HealthMax;
+        CurrentPowerUp = PowerUpType.Empty;
+    }
+
     
   
     
@@ -365,6 +371,11 @@ public class Spaceship : MonoBehaviour
             case PowerUpType.ClearWave:
                 Debug.Log("Clear Wave");
                 StartCoroutine(ClearWaveRoutine());
+                break;
+
+            case PowerUpType.FullHealth:
+                Debug.Log("FullHealth");
+                FullHealth();
                 break;
 
                 

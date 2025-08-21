@@ -9,6 +9,14 @@ public class EnemyOption
     public int Strength;
     public int UnlockWave;
 }
+
+[System.Serializable]
+public class PowerUpOptions
+{
+    public GameObject PowerUpPrefab;
+    public float PowerUpProbability;
+}
+
 public class WaveManager : Singleton<WaveManager>
 {
     [Header("Wave")]
@@ -18,10 +26,13 @@ public class WaveManager : Singleton<WaveManager>
     public int CurrentWave = 1;
     public float WaveDelay = 5f;
     [Header("Enemies")]
-    public List<EnemyOption> AllEnemies = new List<EnemyOption>();
-    public List<GameObject> spawnedEnemies = new List<GameObject>();
     public float PushForce = 100f;
     public float Inaccuracy = 2f;
+    public List<EnemyOption> AllEnemies = new List<EnemyOption>();
+    public List<GameObject> spawnedEnemies = new List<GameObject>();
+    [Header("PowerUps")]
+    public float SpawnChance = 0.2f;
+    public List<PowerUpOptions> PowerUps = new List<PowerUpOptions>();
     
 
 
@@ -113,6 +124,17 @@ public class WaveManager : Singleton<WaveManager>
         }
     }
 
+    public void SpawnPowerUp()
+    {
+        GameObject chosenPowerUp = RandomPowerUp();
+        Vector3 spawnPoint = RandomOffScreenPoint();
+        spawnPoint.z = transform.position.z;
+        GameObject powerUp = Instantiate(chosenPowerUp, spawnPoint, transform.rotation);
+        Vector2 force = PushDirection(spawnPoint) * PushForce;
+        Rigidbody2D PowerUprb = powerUp.GetComponent<Rigidbody2D>();
+        PowerUprb.AddForce(force);
+    }
+
     public IEnumerator WaveRoutine()
     {
         yield return new WaitForSeconds(WaveDelay);     // Delay before wave starts
@@ -122,6 +144,10 @@ public class WaveManager : Singleton<WaveManager>
             WaveInProgress = true;
             WaveStrength = Mathf.RoundToInt(CalculateWaveStrength());   // Rounds the result of the wave strength to the nearest int
             SpawnEnemies();
+            if (Random.value < SpawnChance)
+            {
+                SpawnPowerUp();
+            }
 
             yield return new WaitUntil(() => AllEnemiesDefeated());     // Waits until all the enemies have been defeated
 
@@ -131,5 +157,32 @@ public class WaveManager : Singleton<WaveManager>
             yield return new WaitForSeconds(WaveDelay);     // Delay before starting the next wave
         }
     }
+
+    GameObject RandomPowerUp()
+    {
+        float totalProbability = 0f;
+
+        foreach (var entry in PowerUps)
+        {
+            totalProbability += entry.PowerUpProbability;
+        }
+
+        float randomValue = Random.value * totalProbability;
+
+        foreach (var entry in PowerUps)
+        {
+            if(randomValue < entry.PowerUpProbability)
+            {
+                return entry.PowerUpPrefab;
+                
+            }
+            randomValue -= entry.PowerUpProbability;
+        }
+
+        return PowerUps[0].PowerUpPrefab;
+
+    }
+
+   
 
 }
