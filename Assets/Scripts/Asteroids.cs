@@ -84,7 +84,7 @@ public class Asteroids : MonoBehaviour
 
         GameObject chunk = Instantiate(Chunks[randomIndex], spawnPos, transform.rotation);
         WaveManager.instance.AddEnemy(chunk);
-        Debug.Log("chunks added");
+        //Debug.Log("chunks added");
         Vector2 dir = (spawnPos - newPos).normalized;
 
         Rigidbody2D rb = chunk.GetComponent<Rigidbody2D>();

@@ -36,6 +36,7 @@ public class Spaceship : MonoBehaviour
     public Transform FirePoint;
     public GameObject activeLaser;
     public PowerUpType CurrentPowerUp;
+    public GameObject ExplosionPreFab;
 
     [Header("Sound")]
     public SoundPlayer HitSounds;
@@ -305,6 +306,38 @@ public class Spaceship : MonoBehaviour
         activeLaser.GetComponent<LaserBeam>().ShrinkLaser();
     }
 
+    public IEnumerator ClearWaveRoutine()
+    {
+        foreach (GameObject spawnedEnemies in WaveManager.instance.spawnedEnemies)
+        {
+            if(spawnedEnemies != null)      // If there are enemys spawned
+            {
+                Rigidbody2D enemyRb = spawnedEnemies.GetComponent<Rigidbody2D>();
+
+                if (enemyRb != null)
+                {
+                    Vector2 worldCenter = Vector2.zero;   
+
+                    enemyRb.AddForce(worldCenter * 5f, ForceMode2D.Impulse);
+                    
+                }
+            }
+        }
+
+
+        yield return new WaitForSeconds(0.3f);
+
+
+        foreach (GameObject spawnedEnemies in WaveManager.instance.spawnedEnemies)
+        {
+            Instantiate(ExplosionPreFab, spawnedEnemies.transform.position, spawnedEnemies.transform.rotation);
+            Destroy(spawnedEnemies);
+        }
+
+      
+        CurrentPowerUp = PowerUpType.Empty;
+    }
+
     
   
     
@@ -327,6 +360,11 @@ public class Spaceship : MonoBehaviour
             case PowerUpType.LaserShot:
                 Debug.Log("LaserShot active");
                 StartCoroutine(LaserShotRoutine());
+                break;
+
+            case PowerUpType.ClearWave:
+                Debug.Log("Clear Wave");
+                StartCoroutine(ClearWaveRoutine());
                 break;
 
                 

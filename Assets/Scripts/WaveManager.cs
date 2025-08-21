@@ -40,13 +40,13 @@ public class WaveManager : Singleton<WaveManager>
         }
     }
 
-    /*public void RemoveEnemy(GameObject enemy)
+    public void RemoveEnemy(GameObject enemy)
     {
         if (spawnedEnemies.Contains(enemy))
         {
             spawnedEnemies.Remove(enemy);
         }
-    }*/
+    }
 
     public bool AllEnemiesDefeated()
     {
