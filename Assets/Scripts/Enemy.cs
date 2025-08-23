@@ -11,8 +11,11 @@ public class Enemy : MonoBehaviour
     public Transform Player;
     public float Speed = 2f;
     [Header("Shooting")]
-    public bool CanShoot = false;
-
+    public bool CanShoot;
+    public GameObject BulletPreFab;
+    public float BulletSpeed = 100f;
+    public float FiringRate = 1f;
+    private float fireTimer = 0f;
 
     public GameObject[] Powerups;
     public float SpawnChance = 0.5f;
@@ -39,6 +42,13 @@ public class Enemy : MonoBehaviour
         {
             ChasePlayer();
         }
+
+        if (CanShoot)
+        UpdateFiring();
+
+       
+
+        
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -90,23 +100,23 @@ public class Enemy : MonoBehaviour
         Vector2 enemyPos = transform.position;
         Vector2 playerPos = Player.position;
 
-        Vector2 rawOffset = playerPos - enemyPos;
         Vector2 offset = playerPos - enemyPos;
 
-        if (Mathf.Abs(rawOffset.x) > screenWidth / 2f)
+        if (Mathf.Abs(offset.x) > screenWidth / 2f)
         {
-            offset.x -= Mathf.Sign(rawOffset.x) * screenWidth;
+            offset.x -= Mathf.Sign(offset.x) * screenWidth;
         }
 
-        if (Mathf.Abs(rawOffset.y) > screenHeight / 2f)
+        if (Mathf.Abs(offset.y) > screenHeight / 2f)
         {
-            offset.y -= Mathf.Sign(rawOffset.y) * screenHeight;
+            offset.y -= Mathf.Sign(offset.y) * screenHeight;
         }
 
         Vector2 targetPos = enemyPos + offset.normalized * Speed * Time.deltaTime;
         transform.position = Vector2.Lerp(enemyPos, targetPos, 0.5f);
     }
 
+    
     public void DropPowerup()
     {
         Vector2 spawnPos = transform.position;
@@ -118,6 +128,55 @@ public class Enemy : MonoBehaviour
 
     public void Shoot()
     {
+        GameObject bullet = Instantiate(BulletPreFab, transform.position, transform.rotation);
+        //Find the bullets rigidbody component
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        //Create a force to push the bullet 'up' from the spaceship direction
+        Vector2 force = transform.up * BulletSpeed;
+        rb.AddForce(force);
+    }
+
+    public void UpdateFiring()
+    {
+       
+        if (fireTimer <= 0f)
+        {
+            ShootAtPlayer();
+            fireTimer = 1f / FiringRate;
+        }
+        fireTimer -= Time.deltaTime;
+    }
+
+    public void ShootAtPlayer()
+    {
+        if (BulletPreFab == null || Player == null)
+            return;
+        
+            
+       
+        Vector2 screenSizeWorld = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        float screenWidth = screenSizeWorld.x * 2f;
+        float screenHeight = screenSizeWorld.y * 2f;
+
+        Vector2 offset = Player.position - transform.position;
+
+        if (Mathf.Abs(offset.x) > screenWidth / 2f)
+        {
+            offset.x -= Mathf.Sign(offset.x) * screenWidth;
+        }
+
+        if (Mathf.Abs(offset.y) > screenHeight / 2f)
+        {
+            offset.y -= Mathf.Sign(offset.y) * screenHeight;
+        }
+
+        Vector2 direction = offset.normalized;
+        GameObject bullet = Instantiate(BulletPreFab, transform.position, Quaternion.identity);
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        bullet.transform.right = direction;
+        Vector2 force = direction * BulletSpeed;
+        rb.AddForce(force);
+
 
     }
 

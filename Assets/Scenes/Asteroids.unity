@@ -1879,9 +1879,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WaveInProgress: 0
-  WaveStrength: 3
+  WaveStrength: 5
   CurrentWave: 1
-  WaveDelay: 2
+  WaveDelay: 5
   PushForce: 100
   Inaccuracy: 2
   AllEnemies:
@@ -1913,8 +1913,23 @@ MonoBehaviour:
     Strength: 1
     UnlockWave: 0
   - EnemyPrefab: {fileID: 4897287989463719334, guid: 76069e709ebf6b940b0d8c8199ac153a, type: 3}
-    Strength: 1
-    UnlockWave: 0
+    Strength: 3
+    UnlockWave: 3
+  - EnemyPrefab: {fileID: 5199360426041700470, guid: 4ac2bd2bb1249f841bf389421ba57c5b, type: 3}
+    Strength: 4
+    UnlockWave: 4
+  - EnemyPrefab: {fileID: 5199360426041700470, guid: 4ac2bd2bb1249f841bf389421ba57c5b, type: 3}
+    Strength: 4
+    UnlockWave: 5
+  - EnemyPrefab: {fileID: 800446305794581320, guid: 22a4fb4f10403974896f075f33dfa788, type: 3}
+    Strength: 5
+    UnlockWave: 8
+  - EnemyPrefab: {fileID: 6386589926303616886, guid: 6ee218d169ad5164ea07d9b3e538b9e5, type: 3}
+    Strength: 5
+    UnlockWave: 9
+  - EnemyPrefab: {fileID: 4982767064206936111, guid: 4bfec8c46b5636742987e6ebc353b032, type: 3}
+    Strength: 6
+    UnlockWave: 10
   spawnedEnemies: []
   SpawnChance: 0.6
   PowerUps:
@@ -3333,7 +3348,7 @@ MonoBehaviour:
   MaxSpeed: 2
   AngularDrag: 1
   LinearDrag: 1
-  HealthMax: 3
+  HealthMax: 5
   HealthCurrent: 0
   BulletPreFab: {fileID: 2142876235958566794, guid: 771f2c95846015c40be4265516dafc3f, type: 3}
   BulletSpeed: 100
