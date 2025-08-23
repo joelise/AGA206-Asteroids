@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3496356379098156637}
   m_Layer: 0
   m_Name: Asteroid_Med01
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnValue: 2
   CollisionDamage: 1
-  HealthMax: 3
+  HealthMax: 2
   OnScreen: 0
   Chunks:
   - {fileID: 3151577066346558193, guid: 690e19facf253164d90860b186eaa83d, type: 3}

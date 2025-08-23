@@ -18,6 +18,15 @@ public class Bullet : MonoBehaviour
             asteriod.TakeDamage(Damage);
             Explode();
         }
+
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy)
+        {
+            enemy.TakeDamage(Damage);
+            Explode();
+        }
+
+        
     }
 
     private void Explode()

@@ -130,7 +130,7 @@ public class WaveManager : Singleton<WaveManager>
         Vector3 spawnPoint = RandomOffScreenPoint();
         spawnPoint.z = transform.position.z;
         GameObject powerUp = Instantiate(chosenPowerUp, spawnPoint, transform.rotation);
-        Vector2 force = PushDirection(spawnPoint) * PushForce;
+        Vector2 force = PushDirection(spawnPoint) * 50f;
         Rigidbody2D PowerUprb = powerUp.GetComponent<Rigidbody2D>();
         PowerUprb.AddForce(force);
     }

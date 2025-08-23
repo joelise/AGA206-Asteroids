@@ -1912,8 +1912,11 @@ MonoBehaviour:
   - EnemyPrefab: {fileID: 6538966118732436153, guid: c61ce6c7ed11fa94094d38dc3682a189, type: 3}
     Strength: 1
     UnlockWave: 0
+  - EnemyPrefab: {fileID: 4897287989463719334, guid: 76069e709ebf6b940b0d8c8199ac153a, type: 3}
+    Strength: 1
+    UnlockWave: 0
   spawnedEnemies: []
-  SpawnChance: 0.2
+  SpawnChance: 0.6
   PowerUps:
   - PowerUpPrefab: {fileID: 4935955724244986751, guid: 373a9cd83e17984429bde4f5f3ac1b74, type: 3}
     PowerUpProbability: 4
@@ -3210,7 +3213,7 @@ GameObject:
   - component: {fileID: 1770924887}
   m_Layer: 0
   m_Name: Spaceship
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

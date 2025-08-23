@@ -73,6 +73,13 @@ public class LaserBeam : MonoBehaviour
             asteriod.TakeDamage(Damage);
             Instantiate(ExplosionPrefab, collision.transform.position, Quaternion.identity);
         }
+
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy)
+        {
+            enemy.TakeDamage(Damage);
+            Instantiate(ExplosionPrefab, collision.transform.position, Quaternion.identity);
+        }
     }
 
 }
