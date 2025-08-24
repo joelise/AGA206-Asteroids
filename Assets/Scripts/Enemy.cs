@@ -1,15 +1,18 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
-{ 
+{
+    [Header("Damage & Health")]
     public int CollisionDamage = 2;
     public int HealthMax = 5;
     public int HealthCurrent;
-    public int ScoreValue = 50;
     public bool OnScreen = false;
+
     [Header("Chase Player")]
     public Transform Player;
     public float Speed = 2f;
+  
     [Header("Shooting")]
     public bool CanShoot;
     public GameObject BulletPreFab;
@@ -17,38 +20,47 @@ public class Enemy : MonoBehaviour
     public float FiringRate = 1f;
     private float fireTimer = 0f;
 
+    [Header("PowerUps")]
     public GameObject[] Powerups;
     public float SpawnChance = 0.5f;
-    
 
-    private Camera cam;
+    [Header("Scoring")]
+    public int ScoreValue = 50;
+
+    [Header("Components")]
     public SpriteRenderer Renderer;
-
+    Rigidbody2D Rb;
+    Camera Cam;
+   
     private void Start()
     {
         HealthCurrent = HealthMax;
-        cam = Camera.main;
-        Player = GameObject.FindGameObjectWithTag("Player").transform;
+        Rb = GetComponent<Rigidbody2D>();
+        Cam = Camera.main;
+
+        if (Player == null)
+        {
+            Player = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
     }
 
     private void Update()
     {
         if (Renderer.isVisible)
         {
-            OnScreen = true;
-        }
-
-        if (Player != null)
-        {
-            ChasePlayer();
+            OnScreen = true;  
         }
 
         if (CanShoot)
-        UpdateFiring();
+        {
+            UpdateFiring();
+        }
+    }
 
-       
-
-        
+    private void FixedUpdate()
+    {
+        ChasePlayer();
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -67,7 +79,6 @@ public class Enemy : MonoBehaviour
         {
             HealthCurrent -= damage;
         }
-
 
         if (HealthCurrent <= 0)
         {
@@ -91,54 +102,83 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void ChasePlayer()
+    private Vector2 FindPlayerDirection()
     {
-        Vector2 screenSizeWorld = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        if (Player == null)
+            return Vector2.zero;    // If there is no player return no direction
+
+
+        // Converts screen size into world units from the centre
+        Vector2 screenSizeWorld = Cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
+        // Calculates the full width and height by doubling
         float screenWidth = screenSizeWorld.x * 2f;
         float screenHeight = screenSizeWorld.y * 2f;
 
+        // Direction from enemy to player
+        Vector2 offset = Player.position - transform.position;
+
+        // Handles player position with screen wrap so the enemy still follows the player through the screen wrap
+        if (Mathf.Abs(offset.x) > screenWidth / 2f)             // If the distance along X is greater than half the screen width
+        {
+            // Mathf.Sign(offset.x) returns positive or negative number so the enemy knows if the player is to the right or left
+            offset.x -= Mathf.Sign(offset.x) * screenWidth;     // Flips the direction so the enemy goes through the screen wrap          
+        }
+
+        if (Mathf.Abs(offset.y) > screenHeight / 2f)            // If the distance along Y is greater than half the screen height
+        {
+            // Mathf.Sign(offset.y) returns positive or negative number so the enemy knows if the player is above or below
+            offset.y -= Mathf.Sign(offset.y) * screenHeight;    // Flips the direction so the enemy goes through the screen wrap 
+        }
+
+        return offset.normalized;
+    }
+
+    public void ChasePlayer()
+    {
+        if (Player == null)
+            return;
+
         Vector2 enemyPos = transform.position;
-        Vector2 playerPos = Player.position;
+        Vector2 direction = FindPlayerDirection();
 
-        Vector2 offset = playerPos - enemyPos;
+        Vector2 targetPos = enemyPos + direction * Speed * Time.deltaTime;
+        Vector2 smoothPos = Vector2.Lerp(enemyPos, targetPos, 0.5f);
 
-        if (Mathf.Abs(offset.x) > screenWidth / 2f)
-        {
-            offset.x -= Mathf.Sign(offset.x) * screenWidth;
-        }
-
-        if (Mathf.Abs(offset.y) > screenHeight / 2f)
-        {
-            offset.y -= Mathf.Sign(offset.y) * screenHeight;
-        }
-
-        Vector2 targetPos = enemyPos + offset.normalized * Speed * Time.deltaTime;
-        transform.position = Vector2.Lerp(enemyPos, targetPos, 0.5f);
+        Rb.MovePosition(smoothPos);     // Moves enemy in the direction of the player
+        
     }
 
     
     public void DropPowerup()
     {
-        Vector2 spawnPos = transform.position;
-        int randomIndex = Random.Range(0, Powerups.Length);
+        Vector2 spawnPos = transform.position;                  // Gets location to spawn
+        int randomIndex = Random.Range(0, Powerups.Length);     // Gets random powerup
 
-        GameObject powerUp = Instantiate(Powerups[randomIndex], spawnPos, transform.rotation);
+        GameObject powerUp = Instantiate(Powerups[randomIndex], spawnPos, transform.rotation);  // Spawns powerup
 
     }
 
-    public void Shoot()
+    public void ShootAtPlayer()
     {
-        GameObject bullet = Instantiate(BulletPreFab, transform.position, transform.rotation);
-        //Find the bullets rigidbody component
+        if (BulletPreFab == null || Player == null)
+            return;
+
+        Vector2 direction = FindPlayerDirection();
+
+        // Spawns bullet Prefab
+        GameObject bullet = Instantiate(BulletPreFab, transform.position, Quaternion.identity);
+        // Find the bullets rigidbody component
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        //Create a force to push the bullet 'up' from the spaceship direction
-        Vector2 force = transform.up * BulletSpeed;
+        // Finds the Player position from the right of the enemy
+        bullet.transform.right = direction;
+        // Create a force to push the bullet towards the player
+        Vector2 force = direction * BulletSpeed;
         rb.AddForce(force);
     }
 
     public void UpdateFiring()
     {
-       
         if (fireTimer <= 0f)
         {
             ShootAtPlayer();
@@ -146,40 +186,4 @@ public class Enemy : MonoBehaviour
         }
         fireTimer -= Time.deltaTime;
     }
-
-    public void ShootAtPlayer()
-    {
-        if (BulletPreFab == null || Player == null)
-            return;
-        
-            
-       
-        Vector2 screenSizeWorld = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-        float screenWidth = screenSizeWorld.x * 2f;
-        float screenHeight = screenSizeWorld.y * 2f;
-
-        Vector2 offset = Player.position - transform.position;
-
-        if (Mathf.Abs(offset.x) > screenWidth / 2f)
-        {
-            offset.x -= Mathf.Sign(offset.x) * screenWidth;
-        }
-
-        if (Mathf.Abs(offset.y) > screenHeight / 2f)
-        {
-            offset.y -= Mathf.Sign(offset.y) * screenHeight;
-        }
-
-        Vector2 direction = offset.normalized;
-        GameObject bullet = Instantiate(BulletPreFab, transform.position, Quaternion.identity);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        bullet.transform.right = direction;
-        Vector2 force = direction * BulletSpeed;
-        rb.AddForce(force);
-
-
-    }
-
-
-
 }

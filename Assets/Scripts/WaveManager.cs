@@ -24,7 +24,9 @@ public class WaveManager : Singleton<WaveManager>
     public int WaveStrength;
     private float strengthIncrement = 1.25f;
     public int CurrentWave = 1;
+    public bool WaveComplete = false;
     public float WaveDelay = 5f;
+    public WaveUI waveUi;
     [Header("Enemies")]
     public float PushForce = 100f;
     public float Inaccuracy = 2f;
@@ -63,14 +65,14 @@ public class WaveManager : Singleton<WaveManager>
     {
         // Checks list amount, if list is empty AllEnemiesDefeated = true
 
-        spawnedEnemies.RemoveAll(e => e == null); 
+        spawnedEnemies.RemoveAll(e => e == null);
         return spawnedEnemies.Count == 0;
 
     }
 
     public float CalculateWaveStrength()
     {
-        float startingStrength = 3f;
+        float startingStrength = 8f;
         return startingStrength + (CurrentWave - 1) * strengthIncrement; // Calculates the wave strength and returns a float
     }
 
@@ -137,11 +139,14 @@ public class WaveManager : Singleton<WaveManager>
 
     public IEnumerator WaveRoutine()
     {
+        waveUi.ShowWaveNumber();
         yield return new WaitForSeconds(WaveDelay);     // Delay before wave starts
+        waveUi.HideWaveNumber();
 
         while (true)    // Allows endless waves
         {
             WaveInProgress = true;
+            WaveComplete = false;
             WaveStrength = Mathf.RoundToInt(CalculateWaveStrength());   // Rounds the result of the wave strength to the nearest int
             SpawnEnemies();
             if (Random.value < SpawnChance)
@@ -150,16 +155,22 @@ public class WaveManager : Singleton<WaveManager>
             }
 
             yield return new WaitUntil(() => AllEnemiesDefeated());     // Waits until all the enemies have been defeated
-
+            WaveComplete = true;
+            waveUi.ShowWaveComplete();
+            yield return new WaitForSeconds(2f);
+            waveUi.HideWaveComplete();
             CurrentWave++;      // Increments the wave number
+            waveUi.ShowWaveNumber();
             WaveInProgress = false;
 
             yield return new WaitForSeconds(WaveDelay);     // Delay before starting the next wave
+            waveUi.HideWaveNumber();
         }
     }
 
     GameObject RandomPowerUp()
     {
+        // Calculates the total probability by add all the weighted probability of the powerups
         float totalProbability = 0f;
 
         foreach (var entry in PowerUps)
@@ -167,8 +178,10 @@ public class WaveManager : Singleton<WaveManager>
             totalProbability += entry.PowerUpProbability;
         }
 
+        // Picks a random value between 0 and the total probability
         float randomValue = Random.value * totalProbability;
 
+        // Cycles through powerups subtracting the probability until it matches the random value
         foreach (var entry in PowerUps)
         {
             if(randomValue < entry.PowerUpProbability)
@@ -178,7 +191,7 @@ public class WaveManager : Singleton<WaveManager>
             }
             randomValue -= entry.PowerUpProbability;
         }
-
+       
         return PowerUps[0].PowerUpPrefab;
 
     }

@@ -7,6 +7,7 @@ public class ScoreUI : MonoBehaviour
     public TMP_Text ScoreBoxText;
     private Spaceship ship;
     public GameObject ScoreText;
+   
 
     private void Start()
     {

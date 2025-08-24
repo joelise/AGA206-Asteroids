@@ -13,9 +13,6 @@ public class Spaceship : MonoBehaviour
     public float MaxSpeed = 3f;
     public float AngularDrag = 1f;
     public float LinearDrag = 3f;
-    //public float AccelSmoothing = 2f;
-    //private float smoothVertical;
-    //private float currentThrust;
 
     [Header("Health")]
     public int HealthMax = 3;
@@ -28,7 +25,6 @@ public class Spaceship : MonoBehaviour
     private float fireTimer = 0f;
 
     [Header("PowerUps")]
-    public bool HasPowerUp = false;
     public float PowerUpDuration = 10f;
     public float ScatterAngle = 30f;
     public int NumberOfBullets = 3;
@@ -46,7 +42,7 @@ public class Spaceship : MonoBehaviour
     public GameOverUi GameOverUI;
     public ScoreUI ScoreUI;
     public PauseMenuUI PauseUI;
-
+   
     [Header("Score")]
     public int Score;
     public int HighScore;
@@ -90,8 +86,6 @@ public class Spaceship : MonoBehaviour
         {
             PlayerPrefs.DeleteKey("HighScore");
         }
-
-   
     }
 
     private void UpdateFiring()
@@ -102,6 +96,7 @@ public class Spaceship : MonoBehaviour
         if (!isFiring || fireTimer >= 0 || IsPaused == true)
             return;
 
+        // Checks the powerup type and runs the function depending on the current type
         if (CurrentPowerUp != PowerUpType.ScatterShot || CurrentPowerUp != PowerUpType.LaserShot)
         {
             FireBullet();
@@ -120,36 +115,27 @@ public class Spaceship : MonoBehaviour
             FireBullet();
             fireTimer = FiringRate;
         }
-
-   
     }
 
     private void ApplyThrust(float amount)
     {
-        //smoothVertical = Mathf.Lerp(smoothVertical, amount * EnginePower, Time.deltaTime * AccelSmoothing);
-        //currentThrust = Mathf.Lerp(currentThrust, smoothVertical * EnginePower, Time.deltaTime * AccelSmoothing);
-
         if (amount != 0)
         {
-            Vector2 thrust = transform.up * EnginePower * amount;
-            rb2D.AddForce(thrust, ForceMode2D.Force);
+            Vector2 thrust = transform.up * EnginePower * amount;       // Calculate thrust
+            rb2D.AddForce(thrust, ForceMode2D.Force);                   // Adds force
         }
 
-        //rb2D.AddForce(transform.up * currentThrust, ForceMode2D.Force);
-        
-        if(rb2D.linearVelocity.magnitude > MaxSpeed)
+        if(rb2D.linearVelocity.magnitude > MaxSpeed)                    // If velocity is greater than max speed
         {
+            // Smoothly reduce to the max speed
             rb2D.linearVelocity = Vector2.Lerp(rb2D.linearVelocity, rb2D.linearVelocity.normalized * MaxSpeed, Time.deltaTime * 2f);
         }
     }
 
-
     private void ApplyTorque(float amount)
     {
         rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -amount * TurnPower, Time.deltaTime * 2f);
-        //Debug.Log("Torque amount is " + amount);
-       // float torque = amount * TurnPower * Time.deltaTime;
-        //rb2D.AddTorque(-torque);
+        
     }
 
     public void TakeDamage(int damage)
@@ -176,7 +162,6 @@ public class Spaceship : MonoBehaviour
     public void Explode()
     {
         //Destroy the ship, end the game
-        //Debug.Log("Game Over");
         Time.timeScale = 0.5f;
         GameOver();
         Flash.Hide();
@@ -237,8 +222,7 @@ public class Spaceship : MonoBehaviour
 
     public IEnumerator Invincibility()
     {
-        collider.enabled = false;
-        HasPowerUp = true;
+        collider.enabled = false;           // Turns off collision
 
         // Array of colours to cycle through
         Color[] rainbowColors = new Color[]
@@ -259,10 +243,10 @@ public class Spaceship : MonoBehaviour
             elapsed += flashSpeed;
         }
 
-        CurrentPowerUp = PowerUpType.Empty;
+        CurrentPowerUp = PowerUpType.Empty;         // Resets powerup type
        
-        spriteRenderer.color = Color.white;
-        collider.enabled = true;
+        spriteRenderer.color = Color.white;         // Returns to original colour
+        collider.enabled = true;                    // turns collision on
     }
 
     public IEnumerator ScatterShotRoutine()
@@ -291,18 +275,16 @@ public class Spaceship : MonoBehaviour
        
     }
 
-
-
     public IEnumerator LaserShotRoutine()
     {
-        
+        // Spawns laser prefab and scales it larger
         activeLaser = Instantiate(LaserBeamPrefab, FirePoint.position, transform.rotation, transform);
         activeLaser.GetComponent<LaserBeam>().GrowLaser();
 
         yield return new WaitForSeconds(PowerUpDuration);
-
+        // Resets powerup type
         CurrentPowerUp = PowerUpType.Empty;
-        
+        // Shrinks the laser
         activeLaser.GetComponent<LaserBeam>().ShrinkLaser();
     }
 
@@ -316,9 +298,9 @@ public class Spaceship : MonoBehaviour
 
                 if (enemyRb != null)
                 {
-                    Vector2 worldCenter = Vector2.zero;   
+                    Vector2 worldCenter = Vector2.zero;     // Gets the center of the world
 
-                    enemyRb.AddForce(worldCenter * 5f, ForceMode2D.Impulse);
+                    enemyRb.AddForce(worldCenter * 5f, ForceMode2D.Impulse);    // Pushes enemys away from the center
                     
                 }
             }
@@ -330,12 +312,12 @@ public class Spaceship : MonoBehaviour
 
         foreach (GameObject spawnedEnemies in WaveManager.instance.spawnedEnemies)
         {
+            // For each enemy spawn an explosion and destroy the enemy
             Instantiate(ExplosionPreFab, spawnedEnemies.transform.position, spawnedEnemies.transform.rotation);
             Destroy(spawnedEnemies);
         }
 
-      
-        CurrentPowerUp = PowerUpType.Empty;
+        CurrentPowerUp = PowerUpType.Empty;     // resets the powerup type
     }
 
     public void FullHealth()
@@ -344,37 +326,29 @@ public class Spaceship : MonoBehaviour
         CurrentPowerUp = PowerUpType.Empty;
     }
 
-    
-  
-    
-
     public void ApplyPowerUp(PowerUpType powerUp)
     {
+        // Runs each function depending on what powerup was collected
         CurrentPowerUp = powerUp;
         switch (powerUp)
         {
             case PowerUpType.Invincibility:
-                Debug.Log("Invincibility active");
                 StartCoroutine(Invincibility());
                 break;
 
             case PowerUpType.ScatterShot:
-                Debug.Log("ScatterShot active");
                 StartCoroutine(ScatterShotRoutine());
                 break;
 
             case PowerUpType.LaserShot:
-                Debug.Log("LaserShot active");
                 StartCoroutine(LaserShotRoutine());
                 break;
 
             case PowerUpType.ClearWave:
-                Debug.Log("Clear Wave");
                 StartCoroutine(ClearWaveRoutine());
                 break;
 
             case PowerUpType.FullHealth:
-                Debug.Log("FullHealth");
                 FullHealth();
                 break;
 

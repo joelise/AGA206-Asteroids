@@ -21,12 +21,13 @@ public class LaserBeam : MonoBehaviour
 
     public IEnumerator GrowLaserRoutine(Vector3 originalScale, Vector3 finalScale, float timeToScale)
     {
+        // Scales the prefab larger to make it appear like the laser is growing when activated
         float timer = 0f;
         while (timer < timeToScale)
         {
             timer += Time.deltaTime;
             float t = Mathf.Clamp01(timer / timeToScale);
-            transform.localScale = Vector3.Lerp(this.originalScale, growthScale, t);
+            transform.localScale = Vector3.Lerp(this.originalScale, growthScale, t);    // Smooths the scale from the original sized to the full size
 
             yield return null;
         }
@@ -43,12 +44,13 @@ public class LaserBeam : MonoBehaviour
 
     public IEnumerator ShrinkLaserRoutine(Vector3 finalScale, Vector3 endScale, float timeToScale)
     {
+        // Scales the prefab smaller to make it appear like the laser is shrinking when deactivated
         float timer = 0f;
         while (timer < timeToScale)
         {
             timer += Time.deltaTime;
             float t = Mathf.Clamp01(timer / timeToScale);
-            transform.localScale = Vector3.Lerp(growthScale, noScale, t);
+            transform.localScale = Vector3.Lerp(growthScale, noScale, t);   // Smooths the scale from the current size to look as if it is off
 
             yield return null;
         }
